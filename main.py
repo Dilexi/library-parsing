@@ -1,6 +1,7 @@
 import os
 import requests
 import argparse
+from time import sleep
 from bs4 import BeautifulSoup
 from pathvalidate import sanitize_filename
 from urllib.parse import urljoin, unquote, urlsplit
@@ -78,6 +79,9 @@ def main():
             download_txt(url_txt_book, number, filename)
         except requests.exceptions.HTTPError:
             print('книга не найдена')
+        except requests.exceptions.ConnectionError:
+            print("Повторное подключение к серверу")
+            sleep(20)
    
 
 if __name__=='__main__':
