@@ -69,9 +69,9 @@ def main():
             response = requests.get(url)
             response.raise_for_status() 
             check_for_redirect(response)
-            book_image_url = parse_book_page(response)['image_url']
-            download_image(book_image_url)
-            book_title = parse_book_page(response)['title']
+            book_parameters = parse_book_page(response)
+            download_image(book_parameters['image_url'])
+            book_title = book_parameters['title']
             filename = f'{number}. {book_title.strip()}'
             url_txt_book = f'https://tululu.org/txt.php?id={number}'
             download_txt(url_txt_book, filename)
