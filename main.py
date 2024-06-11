@@ -7,7 +7,6 @@ from pathvalidate import sanitize_filename
 from urllib.parse import urljoin, unquote, urlsplit
 
 
-
 def check_for_redirect(response):
     if response.history:
         raise requests.exceptions.HTTPError
