@@ -75,7 +75,7 @@ def main():
             filename = f'{number}. {book_title.strip()}'
             url_txt_book = f'https://tululu.org/txt.php?id={number}'
             download_txt(url_txt_book, filename)
-        except:
+        except requests.exceptions.HTTPError:
             print('книга не найдена')
    
 
