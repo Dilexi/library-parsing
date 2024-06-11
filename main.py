@@ -12,9 +12,10 @@ def check_for_redirect(response):
         raise requests.exceptions.HTTPError
    
 
-def download_txt(url, filename, folder='books/'):
+def download_txt(url, number, filename, folder='books/'):
     os.makedirs(folder, exist_ok=True)
-    response = requests.get(url)
+    params = {'id' : number}
+    response = requests.get(url, params=params)
     response.raise_for_status() 
     check_for_redirect(response)
     filepath = os.path.join(f'{folder}{sanitize_filename(filename)}.txt')
@@ -73,8 +74,8 @@ def main():
             download_image(book_parameters['image_url'])
             book_title = book_parameters['title']
             filename = f'{number}. {book_title.strip()}'
-            url_txt_book = f'https://tululu.org/txt.php?id={number}'
-            download_txt(url_txt_book, filename)
+            url_txt_book = f'https://tululu.org/txt.php'
+            download_txt(url_txt_book, number, filename)
         except requests.exceptions.HTTPError:
             print('книга не найдена')
    
