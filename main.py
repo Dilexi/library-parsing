@@ -66,14 +66,14 @@ def main():
     parser.add_argument("--end_id", type=int,
                         help="Конечный id книги для скачивания", default=10)
     args = parser.parse_args()
-    for id in range(args.start_id, args.end_id):
+    for number in range(args.start_id, args.end_id):
         try:
-            url = f"https://tululu.org/b{id}/"
+            url = f"https://tululu.org/b{number}/"
             book_image_url = parse_book_page(url)['image_url']
             download_image(book_image_url)
             book_title = parse_book_page(url)['title']
-            filename = f'{id}. {book_title.strip()}'
-            url_txt_book = f'https://tululu.org/txt.php?id={id}'
+            filename = f'{number}. {book_title.strip()}'
+            url_txt_book = f'https://tululu.org/txt.php?id={number}'
             download_txt(url_txt_book, filename)
         except:
             print('книга не найдена')
