@@ -9,7 +9,7 @@ from urllib.parse import urljoin, unquote, urlsplit
 
 def check_for_redirect(response):
     if response.history:
-        raise requests.exception.HTTPError
+        raise requests.exceptions.HTTPError
    
 
 def download_txt(url, filename, folder='books/'):
@@ -33,10 +33,7 @@ def download_image(image_url, folder='images/'):
         file.write(response.content)
 
 
-def parse_book_page(url):
-    response = requests.get(url)
-    response.raise_for_status() 
-    check_for_redirect(response)
+def parse_book_page(response):
     soup = BeautifulSoup(response.text, 'lxml')
     book_image_url = soup.find('div', class_='bookimage').find('img')['src']
     full_image_url = urljoin('https://tululu.org', book_image_url)
@@ -69,9 +66,12 @@ def main():
     for number in range(args.start_id, args.end_id):
         try:
             url = f"https://tululu.org/b{number}/"
-            book_image_url = parse_book_page(url)['image_url']
+            response = requests.get(url)
+            response.raise_for_status() 
+            check_for_redirect(response)
+            book_image_url = parse_book_page(response)['image_url']
             download_image(book_image_url)
-            book_title = parse_book_page(url)['title']
+            book_title = parse_book_page(response)['title']
             filename = f'{number}. {book_title.strip()}'
             url_txt_book = f'https://tululu.org/txt.php?id={number}'
             download_txt(url_txt_book, filename)
