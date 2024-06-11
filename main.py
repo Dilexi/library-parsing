@@ -35,10 +35,10 @@ def download_image(image_url, folder='images/'):
         file.write(response.content)
 
 
-def parse_book_page(response):
+def parse_book_page(response, template_url):
     soup = BeautifulSoup(response.text, 'lxml')
     book_image_url = soup.find('div', class_='bookimage').find('img')['src']
-    full_image_url = urljoin('https://tululu.org', book_image_url)
+    full_image_url = urljoin(template_url, book_image_url)
     title = soup.find('h1').text
     book_title, book_author = title.split(' :: ')
     book_comments = soup.find_all('div', class_='texts')
@@ -71,7 +71,7 @@ def main():
             response = requests.get(url)
             response.raise_for_status() 
             check_for_redirect(response)
-            book_parameters = parse_book_page(response)
+            book_parameters = parse_book_page(response, url)
             download_image(book_parameters['image_url'])
             book_title = book_parameters['title']
             filename = f'{number}. {book_title.strip()}'
