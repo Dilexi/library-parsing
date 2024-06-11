@@ -39,15 +39,15 @@ def parse_book_page(response):
     full_image_url = urljoin('https://tululu.org', book_image_url)
     title = soup.find('h1').text
     book_title, book_author = title.split(' :: ')
-    comments_book = soup.find_all('div', class_='texts')
-    comments = [comment.find('span', class_='black').text for comment in comments_book]
-    genres_books = soup.find('span', class_='d_book').find_all('a')
-    genres_books = [genre.text for genre in genres_books]
+    book_comments = soup.find_all('div', class_='texts')
+    comments = [comment.find('span', class_='black').text for comment in book_comments]
+    books_genres = soup.find('span', class_='d_book').find_all('a')
+    books_genres = [genre.text for genre in books_genres]
     book_parameters = {
         "title": book_title.strip(),
         "author": book_author.strip(),
         "image_url": full_image_url,
-        "genre": genres_books,
+        "genre": books_genres,
         "comments": comments
     }
     return book_parameters
